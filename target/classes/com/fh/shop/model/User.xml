@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fh.shop.mapper.user.UserDao">
+    <select id="queryList" resultType="com.fh.shop.model.user.User">
+        select 	* from  t_user
+    </select>
+
+    <sql id="userWhere">
+        where 1=1
+        <if test="userName!=null and userName!=''">
+            and userName like "%"#{userName}"%"
+        </if>
+        <if test="realName!=null and realName!=''">
+            and realName like "%"#{realName}"%"
+        </if>
+    </sql>
+
+    <select id="queryUserList" parameterType="java.util.Map" resultType="com.fh.shop.model.user.User">
+        select 	* from  t_user
+        <include refid="userWhere"></include>
+        limit #{start},#{length}
+    </select>
+
+    <select id="queryUserCount" parameterType="java.util.Map" resultType="int">
+        select count(*) from t_user
+        <include refid="userWhere"></include>
+    </select>
+
+    <insert id="add" parameterType="com.fh.shop.model.user.User">
+        insert into t_user (userName,realName,password,sex,age,phone,email)
+        values(#{userName},#{realName},#{password},#{sex},#{age},#{phone},#{email})
+    </insert>
+
+    <delete id="delete" parameterType="long">
+        delete from t_user where id=#{id}
+    </delete>
+
+    <select id="queryGetId" parameterType="long">
+        select 	* from  t_user where id=#{id}
+    </select>
+
+    <update id="update" parameterType="com.fh.shop.model.user.User">
+        update t_user set userName=#{userName},realName=#{realName},
+        sex=#{sex},age=#{age},phone=#{phone},email=#{email}
+        where id=#{id}
+    </update>
+
+</mapper>
